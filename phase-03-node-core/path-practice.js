@@ -20,7 +20,7 @@ async function readProducts() {
     }
     
  const products = JSON.parse(content);
- console.log(products)
+ console.log(products);
 }
 
 readProducts();
