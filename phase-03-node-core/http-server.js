@@ -10,6 +10,27 @@ const server = http.createServer((req,res)=>{
        res.statusCode = 200;
        res.end("Home Page");
     } 
+    else if (req.method === "GET" && req.url === "/api/products") {
+       res.statusCode = 200;
+         res.setHeader("Content-Type", "application/json");
+
+      const response = {
+  "message": "Products fetched successfully",
+  "data": [
+    {
+      "id": 1,
+      "name": "Keyboard",
+      "price": 1500
+    }
+  ]
+}
+       res.end(JSON.stringify(response));
+    }
+    else if (req.method === "GET" && req.url === "/about") {
+         res.statusCode = 200;
+         res.setHeader("Content-Type", "text/plain");
+         res.end("About Page");
+    }
     else if (req.method === "POST" && req.url === "/products") {
 
        let body ="";
