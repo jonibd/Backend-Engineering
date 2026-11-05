@@ -11,4 +11,4 @@ myEmitter.on("login", (user) => {
 
 myEmitter.emit("login", "Jony");
 myEmitter.emit("login", "Jony");
-myEmitter.emit("login", "Jony");
+
