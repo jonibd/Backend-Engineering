@@ -12,4 +12,12 @@
 // throw new Error("Something went wrong in Worker");
 // 
 
-console.log("Worker started");
+const { parentPort, workerData } = require("worker_threads");
+let result = 0;
+
+for (let i = workerData.start; i <= workerData.end; i++) {
+    result = result + i;
+}
+
+parentPort.postMessage(result);
+
