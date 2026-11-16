@@ -4,7 +4,7 @@ const app = express();
 
 const adminRouter = require("./routes/adminRoutes.js");
 
-//Application-level Middlewareok
+// //Application - level Middlewareok
 // app.use((req, res, next) => {
 //     console.log("Request Received");
 //     next();
@@ -45,28 +45,28 @@ const adminRouter = require("./routes/adminRoutes.js");
 //     next();
 // });
 
-// adminRout.get("/dashboard", authMiddleware, (req, res) => {
+// adminRouter.get("/dashboard", authMiddleware, (req, res) => {
 //     res.send("Admin Dashboard");
 // });
 
 
-// adminRout.get("/users", (req, res) => {
+// adminRouter.get("/users", (req, res) => {
 //     res.send("Admin Users");
 
 // });
 
-// adminRout.get("/products", authMiddleware, (req, res) => {
+// adminRouter.get("/products", authMiddleware, (req, res) => {
 //     res.send("Admin products");
 
 // });
-// adminRout.get("/settings", authMiddleware, (req, res) => {
+// adminRouter.get("/settings", authMiddleware, (req, res) => {
 //     res.send("Admin settings ");
 
 // });
 
 
 
-app.use("/admin", adminRouter);
+// app.use("/admin", adminRouter);
 
 
 
@@ -99,6 +99,8 @@ app.use("/admin", adminRouter);
 //     res.status(404).send("Route Not Fount");
 // });
 
+app.use(express.json());
+app.use("/admin", adminRouter);
 app.listen(3001, () => {
     console.log("Server running on port 3001");
 });
