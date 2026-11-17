@@ -4,8 +4,28 @@ const adminRouter = express.Router();
 adminRouter.get("/dashboard", (req, res, next) => {
     res.send("Admin dashboard.");
 });
-adminRouter.get("/users", (req, res, next) => {
-    res.send("Admin user");
+
+
+
+adminRouter.get("/users", async (req, res, next) => {
+    try {
+
+        const users = await Promise.resolve([
+            { id: 1, name: "Jony" },
+            { id: 2, name: "Rahim" }
+        ]);
+
+        throw new Error("Failed to fetch users");
+
+        res.status(200).json({
+            success: true,
+            users: users
+
+        });
+    }
+    catch (error) {
+        next(error);
+    }
 
 });
 
@@ -42,29 +62,46 @@ adminRouter.get("/products", (req, res) => {
     }
 });
 
-adminRouter.post("/products", (req, res) => {
 
+const validateProduct = (req, res, next) => {
+    try {
 
-    const productName = req.body.name;
-    const productPrice = req.body.price;
+        const productName = req.body.name;
+        const productPrice = req.body.price;
 
-    if (typeof productName === "string" && productName.trim() !== "" && typeof productPrice === "number" && productPrice > 0) {
-        products.push({
-            name: productName,
-            price: productPrice
-        });
+        if (typeof productName === "string" && productName.trim() !== "" && typeof productPrice === "number" && productPrice > 0) {
 
-        res.status(201).json({
-            message: "Product create successfully",
-            product: {
+            req.product = {
                 name: productName,
                 price: productPrice
+
             }
-        });
-        console.log(products);
-    } else {
-        return res.status(400).send("Invalid input for name and price!");
+            next();
+
+        } else {
+            return res.status(400).send("Invalid input for name and price!");
+        }
+    } catch (error) {
+        next(error);
     }
+}
+
+adminRouter.post("/products", validateProduct, (req, res, next) => {
+
+    products.push({
+        name: req.product.name,
+        price: req.product.price
+    });
+    res.status(201).json({
+        message: "Product create successfully",
+        product: {
+            name: req.product.name,
+            price: req.product.price
+        }
+    });
+    console.log(products);
+
+
 });
 
 
@@ -102,7 +139,7 @@ adminRouter.delete("/products/:productName", (req, res) => {
         }
         else {
             const product = products.splice(productIndex, 1)[0];
-            
+
             res.status(200).json({
                 message: "Product delete successfully.",
                 product: product,
