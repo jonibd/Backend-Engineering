@@ -102,6 +102,7 @@ adminRouter.delete("/products/:productName", (req, res) => {
         }
         else {
             const product = products.splice(productIndex, 1)[0];
+            
             res.status(200).json({
                 message: "Product delete successfully.",
                 product: product,
