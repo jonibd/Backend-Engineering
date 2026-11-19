@@ -1,14 +1,21 @@
+require("dotenv").config({ path: "../.env" });
 const express = require("express");
 
 const app = express();
 
 const adminRouter = require("./routes/adminRoutes.js");
+const productRouter = require("./routes/productRoutes.js");
+
 app.use(express.json());
 app.use("/admin", adminRouter);
+app.use("/products", productRouter);
 
 app.get("/test-error", (req, res, next) => {
 
-    next(new Error("Somthing want wring."));
+    const error = new Error("Product not found");
+    error.statusCode = 404;
+    next(error);
+
 });
 app.use((req, res, next) => {
     res.status(404).json({
@@ -17,17 +24,14 @@ app.use((req, res, next) => {
 });
 app.use((err, req, res, next) => {
 
-    console.log(err.message);
-    res.status(500).json({
-        message: "Internal Server Error"
+    res.status(err.statusCode || 500).json({
+        message: err.message
     });
 });
-
-app.listen(3001, () => {
-    console.log("Server running on port 3001");
+console.log("Environment:", process.env.NODE_ENV);
+app.listen(process.env.PORT || 3001, () => {
+    console.log(`Server running on port ${process.env.PORT || 3001}`);
 });
-
-
 
 // //Application - level Middlewareok
 // app.use((req, res, next) => {
